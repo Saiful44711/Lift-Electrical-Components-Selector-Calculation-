@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Lift Component Selector</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1e1b4b">
+  <meta name="description" content="Lift Electrical R&amp;I - Component Selector">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Lift Selector">
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #1e1b4b; overflow: hidden; }
+    iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: #eef2f9; }
+    #notice {
+      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
+      padding: 28px; text-align: center; color: #e0e7ff; font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(150deg, #0f172a, #1e1b4b 55%, #4338ca); line-height: 1.6; z-index: 5;
+    }
+    #notice b { color: #fff; }
+    #notice button {
+      margin-top: 14px; border: 0; border-radius: 10px; padding: 11px 22px; font-weight: 700; font-size: 15px;
+      color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed, #06b6d4);
+    }
+  </style>
+</head>
+<body>
+  <div id="notice"><div id="noticeText"></div></div>
+  <iframe id="app" title="Lift Component Selector" allow="clipboard-write"></iframe>
+
+  <script>
+    // ====== PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BETWEEN THE QUOTES ======
+    // It looks like: https://script.google.com/macros/s/AKfycb.../exec
+    var APP_URL = 'PASTE_YOUR_WEB_APP_URL_HERE';
+    // ==========================================================================
+
+    var notice = document.getElementById('notice');
+    var noticeText = document.getElementById('noticeText');
+    var frame = document.getElementById('app');
+
+    function showNotice(html) { noticeText.innerHTML = html; notice.style.display = 'flex'; }
+    function hideNotice() { notice.style.display = 'none'; }
+
+    function load() {
+      if (APP_URL.indexOf('script.google.com') === -1) {
+        showNotice('<b>Setup needed</b><br>Open <b>index.html</b> in this project and paste your Web App URL into <b>APP_URL</b>.');
+        return;
+      }
+      if (!navigator.onLine) {
+        showNotice('<b>You are offline</b><br>Connect to the internet to use Lift Selector.<br><button onclick="load()">Try again</button>');
+        return;
+      }
+      hideNotice();
+      frame.src = APP_URL;
+    }
+
+    window.addEventListener('online', load);
+    window.addEventListener('offline', function () {
+      showNotice('<b>You are offline</b><br>Connect to the internet to use Lift Selector.<br><button onclick="load()">Try again</button>');
+    });
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    }
+    load();
+  </script>
+</body>
+</html>
