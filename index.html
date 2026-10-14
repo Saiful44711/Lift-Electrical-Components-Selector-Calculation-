@@ -1,90 +1,46 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Lift Component Selector</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1e1b4b">
-  <meta name="description" content="Lift Electrical R&amp;I - Component Selector">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" type="image/png" href="icon-192.png">
-  <link rel="apple-touch-icon" href="icon-192.png">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Lift Selector">
-  <style>
-    html, body { margin: 0; padding: 0; height: 100%; background: #1e1b4b; overflow: hidden; }
-    iframe { position: fixed; inset: 0; width: 100%; height: 100%; border: 0; background: #eef2f9; }
-    #notice {
-      position: fixed; inset: 0; display: none; align-items: center; justify-content: center;
-      padding: 28px; text-align: center; color: #e0e7ff; font-family: system-ui, Segoe UI, Roboto, Arial, sans-serif;
-      background: linear-gradient(150deg, #0f172a, #1e1b4b 55%, #4338ca); line-height: 1.6; z-index: 5;
-    }
-    #notice b { color: #fff; }
-    #notice button, #notice a {
-      margin-top: 14px; border: 0; border-radius: 10px; padding: 11px 22px; font-weight: 700; font-size: 15px;
-      color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed, #06b6d4);
-    }
-    #notice a { display: inline-block; text-decoration: none; }
-    #directLink { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 4;
-      padding: 8px 12px; border-radius: 8px; background: #1e1b4b; color: #fff;
-      font: 13px system-ui, sans-serif; text-decoration: none; box-shadow: 0 2px 8px #0003; }
-  </style>
-</head>
-<body>
-  <div id="notice"><div id="noticeText"></div></div>
-  <iframe id="app" title="Lift Component Selector" allow="clipboard-write"></iframe>
-  <a id="directLink" hidden target="_top">Open app directly</a>
-
-  <script>
-    // ====== PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BETWEEN THE QUOTES ======
-    // It looks like: https://script.google.com/macros/s/AKfycb.../exec
-    var APP_URL = 'https://script.google.com/macros/s/AKfycbyRtoeBGHm3KpsOYubWsMZVq_2p4QjOOMvdiVMXIEmL_mDrPiUmt2d5WVTGXHp7NLT5/exec';
-    // ==========================================================================
-
-    var notice = document.getElementById('notice');
-    var noticeText = document.getElementById('noticeText');
-    var frame = document.getElementById('app');
-    var directLink = document.getElementById('directLink');
-    // Phones open the same Apps Script app as a top-level page instead of a
-    // third-party iframe. Desktop keeps the existing embedded experience.
-    var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-      (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
-
-    function showNotice(html) { noticeText.innerHTML = html; notice.style.display = 'flex'; }
-    function hideNotice() { notice.style.display = 'none'; }
-
-    function load() {
-      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(APP_URL)) {
-        showNotice('<b>Setup needed</b><br>Open <b>index.html</b> in this project and paste your Web App URL into <b>APP_URL</b>.');
-        return;
-      }
-      if (!navigator.onLine) {
-        showNotice('<b>You are offline</b><br>Connect to the internet to use Lift Selector.<br><button onclick="load()">Try again</button>');
-        return;
-      }
-      hideNotice();
-      directLink.href = APP_URL;
-      directLink.hidden = false;
-      if (isMobile) {
-        frame.removeAttribute('src');
-        showNotice('<b>Opening Lift Selector...</b><br>If it does not open automatically, use the button below.<br><a id="mobileOpen" target="_top">Open Lift Selector</a>');
-        document.getElementById('mobileOpen').href = APP_URL;
-        window.location.replace(APP_URL);
-        return;
-      }
-      frame.src = APP_URL;
-    }
-
-    window.addEventListener('online', load);
-    window.addEventListener('offline', function () {
-      showNotice('<b>You are offline</b><br>Connect to the internet to use Lift Selector.<br><button onclick="load()">Try again</button>');
-    });
-
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
-    }
-    load();
-  </script>
-</body>
-</html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lift Component Selector</title><meta name="theme-color" content="#1e1b4b">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png"><meta name="mobile-web-app-capable" content="yes">
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:16px/1.6 system-ui,sans-serif;background:#eef2f9;color:#0f172a}
+#launcher{max-width:580px;margin:0 auto;padding:30px 20px 40px}header{display:flex;gap:14px;align-items:center}header img{width:56px;border-radius:15px}h1{font-size:24px;line-height:1.25;margin:0}header p{font-size:13px;margin:4px 0;color:#64748b}.card{margin:24px 0;padding:22px;border-radius:18px;background:white;border:1px solid #e2e8f0}
+.button{display:block;text-align:center;text-decoration:none;border:0;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed,#06b6d4);color:white;padding:14px;font:600 16px system-ui;margin:12px 0;cursor:pointer}.secondary{background:#eef2ff;color:#3730a3}h2{font-size:18px;margin:0 0 8px}.note{color:#64748b;font-size:13px}ol{padding-left:22px}li{margin:8px 0}input{width:100%;padding:10px;font:12px system-ui;border:1px solid #cbd5e1;border-radius:8px}#status{font-size:14px;color:#be123c}#app{position:fixed;inset:0;width:100%;height:100%;border:0;display:none;background:#eef2f9}#desktopLink{position:fixed;bottom:12px;right:12px;padding:8px 12px;border-radius:8px;background:#1e1b4b;color:#fff;text-decoration:none;font-size:13px;display:none;z-index:2}#offline{background:#fff1f2;color:#be123c;padding:10px 14px;border-radius:10px;margin-top:16px;display:none}
+</style></head><body>
+<main id="launcher"><header><img src="icon-192.png" alt="Lift Selector"><div><h1>Lift Component Selector</h1><p>Lift Electrical R&amp;I · Version 4</p></div></header>
+<div id="offline">You are offline. Connect to the internet before opening the app.</div>
+<section class="card"><h2>Open your lift software</h2><p>Use your existing software email and password. Your Google Sheet data stays in the same project.</p>
+<a id="openApp" class="button" target="_blank" rel="noopener noreferrer">Open Lift Selector</a>
+<p class="note">The app opens in a separate browser tab so these instructions stay available.</p>
+</section>
+<section class="card"><h2>If Google Drive says it cannot open the file</h2><p>This error happens before the lift software loads. Try a clean browser session:</p>
+<ol><li>Press <b>Copy app link</b> below.</li><li>In Chrome, tap <b>⋮ → New Incognito tab</b>.</li><li>Paste the copied link in the address bar and open it.</li><li>Log in using your <b>lift software</b> account.</li></ol>
+<button id="copyBtn" class="button secondary" type="button">Copy app link</button><input id="appLink" aria-label="App link" readonly><p id="status" aria-live="polite"></p>
+<details><summary>Alternative: try your primary Google profile</summary><p class="note">This may help with account routing. If it still fails, use Incognito.</p><a id="primaryAccount" class="button secondary" target="_blank" rel="noopener noreferrer">Try primary Google profile</a></details>
+<p class="note">If Incognito also fails, the administrator must check the active Web app deployment URL and access settings. Making the Google Sheet public is not required.</p>
+</section><p class="note">Opening the page inside WhatsApp or another app? Choose “Open in Chrome” first. The app needs an internet connection.</p></main>
+<iframe id="app" title="Lift Component Selector" allow="clipboard-write"></iframe><a id="desktopLink" target="_blank" rel="noopener noreferrer">Open app directly / mobile help</a>
+<script>
+// Update only this URL if you create a different Apps Script deployment.
+var APP_URL = 'https://script.google.com/macros/s/AKfycbyRtoeBGHm3KpsOYubWsMZVq_2p4QjOOMvdiVMXIEmL_mDrPiUmt2d5WVTGXHp7NLT5/exec';
+var validURL = /^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(APP_URL);
+var phone = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
+var help = new URLSearchParams(window.location.search).get('help') === '1';
+var links = ['openApp','desktopLink'];
+if (validURL) {
+ links.forEach(function(id){document.getElementById(id).href=APP_URL;});
+ document.getElementById('appLink').value=APP_URL;
+ var primary = new URL(APP_URL); primary.searchParams.set('authuser','0'); document.getElementById('primaryAccount').href=primary.href;
+ if (!phone && !help) {document.getElementById('launcher').style.display='none';document.getElementById('app').style.display='block';document.getElementById('app').src=APP_URL;document.getElementById('desktopLink').style.display='block';document.getElementById('desktopLink').href='?help=1';}
+} else {document.getElementById('status').textContent='Administrator: replace APP_URL with the production Apps Script URL ending /exec.';}
+function connectionState(){document.getElementById('offline').style.display=navigator.onLine?'none':'block';if(!navigator.onLine){document.getElementById('launcher').style.display='block';document.getElementById('app').style.display='none';}else if(!phone&&!help&&validURL){document.getElementById('launcher').style.display='none';document.getElementById('app').style.display='block';}}
+window.addEventListener('online',connectionState);window.addEventListener('offline',connectionState);connectionState();
+document.getElementById('copyBtn').addEventListener('click',function(){
+ var field=document.getElementById('appLink');field.focus();field.select();
+ if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(APP_URL).then(function(){document.getElementById('status').textContent='Copied. Now open Chrome → New Incognito tab.';}).catch(function(){document.getElementById('status').textContent='Long-press the selected link and choose Copy.';});}
+ else{document.getElementById('status').textContent='Long-press the selected link and choose Copy.';}
+});
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+</script></body></html>
