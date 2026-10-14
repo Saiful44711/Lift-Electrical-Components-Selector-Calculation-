@@ -1,7 +1,7 @@
 // Service worker for the Lift Selector app shell.
 // The real app (Google Apps Script) always loads from the network;
 // this only keeps the small shell + icons available so the app can be installed.
-var CACHE = 'lift-selector-shell-v1';
+var CACHE = 'lift-selector-shell-v2';
 var SHELL = ['./', 'index.html', 'manifest.webmanifest', 'icon-192.png', 'icon-512.png'];
 
 self.addEventListener('install', function (e) {
@@ -12,7 +12,7 @@ self.addEventListener('install', function (e) {
 self.addEventListener('activate', function (e) {
   e.waitUntil(
     caches.keys().then(function (keys) {
-      return Promise.all(keys.filter(function (k) { return k !== CACHE; }).map(function (k) { return caches.delete(k); }));
+      return Promise.all(keys.filter(function (k) { return k.indexOf('lift-selector-shell-') === 0 && k !== CACHE; }).map(function (k) { return caches.delete(k); }));
     })
   );
   self.clients.claim();

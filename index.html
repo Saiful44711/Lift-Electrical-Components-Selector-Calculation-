@@ -21,15 +21,20 @@
       background: linear-gradient(150deg, #0f172a, #1e1b4b 55%, #4338ca); line-height: 1.6; z-index: 5;
     }
     #notice b { color: #fff; }
-    #notice button {
+    #notice button, #notice a {
       margin-top: 14px; border: 0; border-radius: 10px; padding: 11px 22px; font-weight: 700; font-size: 15px;
       color: #fff; background: linear-gradient(135deg, #4f46e5, #7c3aed, #06b6d4);
     }
+    #notice a { display: inline-block; text-decoration: none; }
+    #directLink { position: fixed; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); z-index: 4;
+      padding: 8px 12px; border-radius: 8px; background: #1e1b4b; color: #fff;
+      font: 13px system-ui, sans-serif; text-decoration: none; box-shadow: 0 2px 8px #0003; }
   </style>
 </head>
 <body>
   <div id="notice"><div id="noticeText"></div></div>
   <iframe id="app" title="Lift Component Selector" allow="clipboard-write"></iframe>
+  <a id="directLink" hidden target="_top">Open app directly</a>
 
   <script>
     // ====== PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BETWEEN THE QUOTES ======
@@ -40,12 +45,17 @@
     var notice = document.getElementById('notice');
     var noticeText = document.getElementById('noticeText');
     var frame = document.getElementById('app');
+    var directLink = document.getElementById('directLink');
+    // Phones open the same Apps Script app as a top-level page instead of a
+    // third-party iframe. Desktop keeps the existing embedded experience.
+    var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+      (navigator.maxTouchPoints > 1 && /Macintosh/i.test(navigator.userAgent));
 
     function showNotice(html) { noticeText.innerHTML = html; notice.style.display = 'flex'; }
     function hideNotice() { notice.style.display = 'none'; }
 
     function load() {
-      if (APP_URL.indexOf('script.google.com') === -1) {
+      if (!/^https:\/\/script\.google\.com\/macros\/s\/[^/]+\/exec(?:\?.*)?$/.test(APP_URL)) {
         showNotice('<b>Setup needed</b><br>Open <b>index.html</b> in this project and paste your Web App URL into <b>APP_URL</b>.');
         return;
       }
@@ -54,6 +64,15 @@
         return;
       }
       hideNotice();
+      directLink.href = APP_URL;
+      directLink.hidden = false;
+      if (isMobile) {
+        frame.removeAttribute('src');
+        showNotice('<b>Opening Lift Selector...</b><br>If it does not open automatically, use the button below.<br><a id="mobileOpen" target="_top">Open Lift Selector</a>');
+        document.getElementById('mobileOpen').href = APP_URL;
+        window.location.replace(APP_URL);
+        return;
+      }
       frame.src = APP_URL;
     }
 
